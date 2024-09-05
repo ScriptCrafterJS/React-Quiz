@@ -70,13 +70,21 @@ function reducer(state, action) {
         index: 0,
         answer: null,
         points: 0,
-        timeRemain: 10,
+        timeRemain: state.questions.length * TIME_PER_QUESTION,
       };
     case "tick":
       return {
         ...state,
         timeRemain: state.timeRemain > 0 ? state.timeRemain - 1 : 0,
         status: state.timeRemain > 0 ? state.status : "finished",
+      };
+    case "setBestScore":
+      return {
+        ...state,
+        bestScore:
+          localStorage.getItem("bestScore") === "null"
+            ? 0
+            : localStorage.getItem("bestScore"),
       };
     default:
       throw new Error("Unknown action");
@@ -93,13 +101,23 @@ export default function App() {
   }, 0);
 
   // fetch the questions on mount from our fake API
-  useEffect(function () {
-    // the server is running using json-server npm package
-    fetch("http://localhost:3001/questions")
-      .then((res) => res.json())
-      .then((data) => dispatch({ type: "dataReceived", payload: data }))
-      .catch(() => dispatch({ type: "dataFailed" }));
-  }, []);
+  useEffect(
+    function () {
+      // the server is running using json-server npm package
+      fetch("http://localhost:3001/questions")
+        .then((res) => res.json())
+        .then((data) => dispatch({ type: "dataReceived", payload: data }))
+        .catch(() => dispatch({ type: "dataFailed" }));
+    },
+    [dispatch]
+  );
+
+  useEffect(
+    function () {
+      dispatch({ type: "setBestScore" });
+    },
+    [dispatch]
+  );
   return (
     <div className="app">
       <Header />

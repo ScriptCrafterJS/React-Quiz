@@ -1,9 +1,17 @@
+import { useEffect } from "react";
 export default function FinishScreen({
   points,
   totalPoints,
   bestScore,
   dispatch,
 }) {
+  useEffect(
+    function () {
+      localStorage.setItem("bestScore", bestScore);
+    },
+    [bestScore]
+  );
+
   //derived state
   const percentage = Math.ceil((points / totalPoints) * 100);
   return (
