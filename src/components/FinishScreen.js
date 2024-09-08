@@ -1,10 +1,7 @@
 import { useEffect } from "react";
-export default function FinishScreen({
-  points,
-  totalPoints,
-  bestScore,
-  dispatch,
-}) {
+import { useQuiz } from "../contexts/QuizProvider";
+export default function FinishScreen() {
+  const { points, totalPoints, bestScore, reset } = useQuiz();
   useEffect(
     function () {
       localStorage.setItem("bestScore", bestScore);
@@ -23,10 +20,7 @@ export default function FinishScreen({
       <p className="highscore">
         Best Score: <strong>{bestScore}</strong> points
       </p>
-      <button
-        className="btn btn-ui"
-        onClick={() => dispatch({ type: "reset" })}
-      >
+      <button className="btn btn-ui" onClick={reset}>
         Restart quiz
       </button>
     </>

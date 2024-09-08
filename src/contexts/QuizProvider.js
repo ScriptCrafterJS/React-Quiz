@@ -1,6 +1,6 @@
-import { useContext, useReducer } from "react";
+import { useContext, useReducer, useEffect, createContext } from "react";
 import PropTypes from "prop-types";
-const QuizContext = useContext();
+const QuizContext = createContext();
 
 const initialState = {
   questions: [],
@@ -115,6 +115,29 @@ function QuizProvider({ children }) {
     [dispatch]
   );
 
+  function startQuiz() {
+    dispatch({ type: "startQuiz" });
+  }
+
+  function newAnswer(userAnswer) {
+    dispatch({
+      type: "newAnswer",
+      payload: userAnswer,
+    });
+  }
+
+  function timerTick() {
+    dispatch({ type: "tick" });
+  }
+
+  function nextQuestion() {
+    dispatch({ type: "nextQuestion" });
+  }
+
+  function reset() {
+    dispatch({ type: "reset" });
+  }
+
   return (
     <QuizContext.Provider
       value={{
@@ -127,6 +150,11 @@ function QuizProvider({ children }) {
         timeRemain,
         numOfQuestions,
         totalPoints,
+        startQuiz,
+        newAnswer,
+        timerTick,
+        nextQuestion,
+        reset,
       }}
     >
       {children}
