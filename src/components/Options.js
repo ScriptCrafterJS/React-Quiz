@@ -1,4 +1,8 @@
-export default function Options({ question, dispatch, answer }) {
+import { useQuiz } from "../contexts/QuizProvider";
+
+export default function Options() {
+  const { questions, index, newAnswer, answer } = useQuiz();
+  const question = questions[index];
   return (
     <div className="options">
       {question.options.map((option, index) => (
@@ -10,12 +14,7 @@ export default function Options({ question, dispatch, answer }) {
                 : "wrong"
               : ""
           }`}
-          onClick={() => {
-            dispatch({
-              type: "newAnswer",
-              payload: index,
-            });
-          }}
+          onClick={() => newAnswer(index)}
           key={option}
           disabled={answer}
         >
